@@ -8,519 +8,138 @@
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
 
   :root {
-    --bg: #050f09;
-    --bg2: #0a1a10;
-    --bg3: #0d2b1a;
-    --green1: #1a4d2e;
-    --green2: #2d6e44;
-    --green3: #4a8c5c;
-    --accent: #7ec99a;
-    --glow: #a8e6bc;
-    --text: #d4e8d8;
-    --muted: #7a9e84;
-    --gold: #c9a84c;
+    --bg: #050f09; --bg2: #0a1a10; --bg3: #0d2b1a;
+    --green1: #1a4d2e; --green2: #2d6e44; --green3: #4a8c5c;
+    --accent: #7ec99a; --glow: #a8e6bc; --text: #d4e8d8;
+    --muted: #7a9e84; --gold: #c9a84c;
   }
-
   * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; overflow-x:hidden; }
+  #bg-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
 
-  html { scroll-behavior: smooth; }
+  nav { position:fixed; top:0; width:100%; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 3rem; background:rgba(5,15,9,0.85); backdrop-filter:blur(12px); border-bottom:1px solid rgba(74,140,92,0.15); }
+  .nav-logo { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--accent); letter-spacing:0.05em; }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a { color:var(--muted); text-decoration:none; font-size:0.85rem; letter-spacing:0.08em; text-transform:uppercase; transition:color 0.3s; }
+  .nav-links a:hover { color:var(--accent); }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
-  }
+  section { position:relative; z-index:1; }
 
-  /* CANVAS */
-  #bg-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
-    pointer-events: none;
-  }
+  #hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:6rem 2rem 4rem; }
+  .hero-eyebrow { font-size:0.75rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--green3); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; }
+  .hero-eyebrow::before,.hero-eyebrow::after { content:''; width:40px; height:1px; background:var(--green3); }
+  h1 { font-family:'Playfair Display',serif; font-size:clamp(3rem,7vw,6rem); line-height:1.05; color:#fff; margin-bottom:1rem; }
+  h1 span { color:var(--accent); }
+  .hero-title { font-size:clamp(0.9rem,2vw,1.1rem); color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:2rem; }
+  .hero-desc { max-width:600px; font-size:1.05rem; line-height:1.8; color:var(--text); opacity:0.85; margin-bottom:3rem; }
+  .hero-btns { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
+  .btn { padding:0.8rem 2rem; border-radius:40px; font-size:0.85rem; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; text-decoration:none; }
+  .btn-primary { background:var(--green2); color:#fff; border:1px solid var(--green3); }
+  .btn-primary:hover { background:var(--green3); box-shadow:0 0 24px rgba(74,140,92,0.4); }
+  .btn-outline { background:transparent; color:var(--accent); border:1px solid var(--green2); }
+  .btn-outline:hover { background:rgba(74,140,92,0.1); box-shadow:0 0 16px rgba(74,140,92,0.2); }
+  .scroll-hint { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.5rem; color:var(--muted); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; animation:bounce 2s infinite; }
+  .scroll-hint::after { content:''; width:1px; height:40px; background:linear-gradient(to bottom,var(--green3),transparent); }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; width: 100%;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.2rem 3rem;
-    background: rgba(5,15,9,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(74,140,92,0.15);
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-  }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: color 0.3s;
-  }
-  .nav-links a:hover { color: var(--accent); }
+  #about { padding:7rem 2rem; display:flex; justify-content:center; }
+  .about-inner { max-width:900px; width:100%; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+  .about-text h2 { font-family:'Playfair Display',serif; font-size:2.5rem; color:#fff; margin-bottom:1.5rem; }
+  .about-text p { line-height:1.9; color:var(--text); opacity:0.85; margin-bottom:1.2rem; font-size:0.97rem; }
+  .about-stats { display:flex; flex-direction:column; gap:1.5rem; }
+  .stat-card { background:rgba(26,77,46,0.25); border:1px solid rgba(74,140,92,0.2); border-radius:12px; padding:1.5rem; position:relative; overflow:hidden; transition:all 0.3s; }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--accent); border-radius:2px; }
+  .stat-card:hover { background:rgba(26,77,46,0.4); transform:translateX(4px); box-shadow:0 0 20px rgba(74,140,92,0.15); }
+  .stat-num { font-family:'Playfair Display',serif; font-size:2.2rem; color:var(--accent); }
+  .stat-label { font-size:0.8rem; color:var(--muted); letter-spacing:0.08em; margin-top:0.25rem; }
 
-  /* SECTIONS */
-  section {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* HERO */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 6rem 2rem 4rem;
-  }
-  .hero-eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--green3);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .hero-eyebrow::before, .hero-eyebrow::after {
-    content: '';
-    width: 40px;
-    height: 1px;
-    background: var(--green3);
-  }
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 7vw, 6rem);
-    line-height: 1.05;
-    color: #fff;
-    margin-bottom: 1rem;
-  }
-  h1 span { color: var(--accent); }
-  .hero-title {
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    color: var(--muted);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
-  }
-  .hero-desc {
-    max-width: 600px;
-    font-size: 1.05rem;
-    line-height: 1.8;
-    color: var(--text);
-    opacity: 0.85;
-    margin-bottom: 3rem;
-  }
-  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-  .btn {
-    padding: 0.8rem 2rem;
-    border-radius: 40px;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-decoration: none;
-  }
-  .btn-primary {
-    background: var(--green2);
-    color: #fff;
-    border: 1px solid var(--green3);
-  }
-  .btn-primary:hover {
-    background: var(--green3);
-    box-shadow: 0 0 24px rgba(74,140,92,0.4);
-  }
-  .btn-outline {
-    background: transparent;
-    color: var(--accent);
-    border: 1px solid var(--green2);
-  }
-  .btn-outline:hover {
-    background: rgba(74,140,92,0.1);
-    box-shadow: 0 0 16px rgba(74,140,92,0.2);
-  }
-  .scroll-hint {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--muted);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    animation: bounce 2s infinite;
-  }
-  .scroll-hint::after {
-    content: '';
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, var(--green3), transparent);
-  }
-  @keyframes bounce {
-    0%,100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
-  }
-
-  /* ABOUT */
-  #about {
-    padding: 7rem 2rem;
-    display: flex;
-    justify-content: center;
-  }
-  .about-inner {
-    max-width: 900px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
-  }
-  .about-text h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    color: #fff;
-    margin-bottom: 1.5rem;
-  }
-  .about-text p {
-    line-height: 1.9;
-    color: var(--text);
-    opacity: 0.85;
-    margin-bottom: 1.2rem;
-    font-size: 0.97rem;
-  }
-  .about-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  .stat-card {
-    background: rgba(26,77,46,0.25);
-    border: 1px solid rgba(74,140,92,0.2);
-    border-radius: 12px;
-    padding: 1.5rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s;
-  }
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: var(--accent);
-    border-radius: 2px;
-  }
-  .stat-card:hover {
-    background: rgba(26,77,46,0.4);
-    transform: translateX(4px);
-    box-shadow: 0 0 20px rgba(74,140,92,0.15);
-  }
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    color: var(--accent);
-  }
-  .stat-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    margin-top: 0.25rem;
-  }
-
-  /* SECTION HEADER */
-  .section-header {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-  .section-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    color: #fff;
-    margin-bottom: 0.75rem;
-  }
-  .section-header p {
-    color: var(--muted);
-    font-size: 0.9rem;
-    letter-spacing: 0.08em;
-  }
-  .leaf-divider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin: 1rem auto;
-    color: var(--green3);
-    font-size: 1.2rem;
-  }
-  .leaf-divider::before, .leaf-divider::after {
-    content: '';
-    width: 60px;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--green3));
-  }
-  .leaf-divider::after {
-    background: linear-gradient(to left, transparent, var(--green3));
-  }
+  .section-header { text-align:center; margin-bottom:4rem; }
+  .section-header h2 { font-family:'Playfair Display',serif; font-size:2.5rem; color:#fff; margin-bottom:0.75rem; }
+  .section-header p { color:var(--muted); font-size:0.9rem; letter-spacing:0.08em; }
+  .leaf-divider { display:flex; align-items:center; justify-content:center; gap:1rem; margin:1rem auto; color:var(--green3); font-size:1.2rem; }
+  .leaf-divider::before,.leaf-divider::after { content:''; width:60px; height:1px; }
+  .leaf-divider::before { background:linear-gradient(to right,transparent,var(--green3)); }
+  .leaf-divider::after { background:linear-gradient(to left,transparent,var(--green3)); }
 
   /* PROJECTS */
-  #projects {
-    padding: 7rem 2rem;
+  #projects { padding:7rem 2rem; }
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.5rem; max-width:1100px; margin:0 auto; }
+
+  /* FLIP CARD */
+  .flip-card { height:320px; perspective:1200px; cursor:pointer; }
+  .flip-inner {
+    position:relative; width:100%; height:100%;
+    transform-style:preserve-3d;
+    transition:transform 1.2s cubic-bezier(0.4,0,0.2,1);
   }
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-    max-width: 1100px;
-    margin: 0 auto;
+  .flip-card.flipped .flip-inner { transform:rotateY(180deg); }
+
+  .flip-front, .flip-back {
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border-radius:16px; padding:2rem;
+    border:1px solid rgba(74,140,92,0.2);
+    background:rgba(10,26,16,0.88);
+    overflow:hidden;
   }
-  .project-card {
-    background: rgba(10,26,16,0.8);
-    border: 1px solid rgba(74,140,92,0.2);
-    border-radius: 16px;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s;
-    cursor: default;
-  }
-  .project-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top right, rgba(74,140,92,0.08), transparent 60%);
-    pointer-events: none;
-  }
-  .project-card:hover {
-    border-color: rgba(74,140,92,0.5);
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 32px rgba(74,140,92,0.1);
-  }
-  .project-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  .project-org {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-  }
-  .project-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    color: #fff;
-    margin-bottom: 0.75rem;
-    line-height: 1.3;
-  }
-  .project-card p {
-    font-size: 0.87rem;
-    line-height: 1.75;
-    color: var(--text);
-    opacity: 0.8;
-  }
-  .project-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 1.2rem;
-  }
-  .tag {
-    background: rgba(74,140,92,0.12);
-    border: 1px solid rgba(74,140,92,0.25);
-    color: var(--accent);
-    font-size: 0.7rem;
-    padding: 0.25rem 0.65rem;
-    border-radius: 20px;
-    letter-spacing: 0.05em;
-  }
+  .flip-front::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at top right,rgba(74,140,92,0.08),transparent 60%); pointer-events:none; }
+  .flip-back { transform:rotateY(180deg); background:rgba(13,43,26,0.96); border-color:rgba(74,140,92,0.4); display:flex; flex-direction:column; justify-content:space-between; }
+
+  .project-icon { font-size:2rem; margin-bottom:1rem; }
+  .project-org { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--gold); margin-bottom:0.5rem; }
+  .flip-front h3 { font-family:'Playfair Display',serif; font-size:1.2rem; color:#fff; margin-bottom:0.75rem; line-height:1.3; }
+  .flip-front p { font-size:0.87rem; line-height:1.75; color:var(--text); opacity:0.8; }
+  .project-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:1.2rem; }
+  .tag { background:rgba(74,140,92,0.12); border:1px solid rgba(74,140,92,0.25); color:var(--accent); font-size:0.7rem; padding:0.25rem 0.65rem; border-radius:20px; letter-spacing:0.05em; }
+  .flip-hint { position:absolute; bottom:1rem; right:1.2rem; font-size:0.68rem; color:var(--muted); letter-spacing:0.08em; opacity:0.6; }
+
+  .back-screenshot { width:100%; height:130px; border-radius:8px; overflow:hidden; border:1px solid rgba(74,140,92,0.25); margin-bottom:1rem; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:2rem; }
+  .back-screenshot img { width:100%; height:100%; object-fit:cover; object-position:top; }
+  .flip-back h3 { font-family:'Playfair Display',serif; font-size:1rem; color:#fff; margin-bottom:0.5rem; }
+  .flip-back p { font-size:0.8rem; line-height:1.65; color:var(--text); opacity:0.85; flex:1; overflow:hidden; }
+  .back-link { display:inline-flex; align-items:center; gap:0.5rem; margin-top:1rem; padding:0.55rem 1.2rem; border-radius:30px; background:rgba(74,140,92,0.15); border:1px solid rgba(74,140,92,0.35); color:var(--accent); font-size:0.78rem; text-decoration:none; letter-spacing:0.06em; transition:all 0.2s; align-self:flex-start; }
+  .back-link:hover { background:rgba(74,140,92,0.3); box-shadow:0 0 16px rgba(74,140,92,0.2); }
 
   /* SKILLS */
-  #skills {
-    padding: 7rem 2rem;
-    background: linear-gradient(to bottom, transparent, rgba(10,26,16,0.5), transparent);
-  }
-  .skills-ecosystem {
-    max-width: 900px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
-  }
-  .skill-branch {
-    background: rgba(10,26,16,0.6);
-    border: 1px solid rgba(74,140,92,0.15);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: all 0.3s;
-  }
-  .skill-branch:hover {
-    border-color: rgba(74,140,92,0.4);
-    background: rgba(26,77,46,0.2);
-  }
-  .skill-branch h4 {
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .skill-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .skill-item {
-    background: rgba(74,140,92,0.08);
-    border: 1px solid rgba(74,140,92,0.18);
-    color: var(--text);
-    font-size: 0.78rem;
-    padding: 0.3rem 0.7rem;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-  .skill-item:hover {
-    background: rgba(74,140,92,0.2);
-    color: var(--glow);
-  }
+  #skills { padding:7rem 2rem; background:linear-gradient(to bottom,transparent,rgba(10,26,16,0.5),transparent); }
+  .skills-ecosystem { max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.5rem; }
+  .skill-branch { background:rgba(10,26,16,0.6); border:1px solid rgba(74,140,92,0.15); border-radius:12px; padding:1.5rem; transition:all 0.3s; }
+  .skill-branch:hover { border-color:rgba(74,140,92,0.4); background:rgba(26,77,46,0.2); }
+  .skill-branch h4 { font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  .skill-list { display:flex; flex-wrap:wrap; gap:0.5rem; }
+  .skill-item { background:rgba(74,140,92,0.08); border:1px solid rgba(74,140,92,0.18); color:var(--text); font-size:0.78rem; padding:0.3rem 0.7rem; border-radius:6px; transition:all 0.2s; }
+  .skill-item:hover { background:rgba(74,140,92,0.2); color:var(--glow); }
 
   /* PRESENTATIONS */
-  #presentations {
-    padding: 7rem 2rem;
-  }
-  .pres-list {
-    max-width: 800px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .pres-item {
-    background: rgba(10,26,16,0.6);
-    border: 1px solid rgba(74,140,92,0.15);
-    border-radius: 12px;
-    padding: 1.5rem 2rem;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1.5rem;
-    align-items: start;
-    transition: all 0.3s;
-  }
-  .pres-item:hover {
-    border-color: rgba(74,140,92,0.35);
-    background: rgba(26,77,46,0.2);
-    transform: translateX(4px);
-  }
-  .pres-year {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    color: var(--green3);
-    min-width: 50px;
-  }
-  .pres-info h4 {
-    color: #fff;
-    font-size: 0.95rem;
-    margin-bottom: 0.3rem;
-  }
-  .pres-info p {
-    color: var(--muted);
-    font-size: 0.82rem;
-    line-height: 1.6;
-  }
+  #presentations { padding:7rem 2rem; }
+  .pres-list { max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:1rem; }
+  .pres-item { background:rgba(10,26,16,0.6); border:1px solid rgba(74,140,92,0.15); border-radius:12px; padding:1.5rem 2rem; display:grid; grid-template-columns:auto 1fr; gap:1.5rem; align-items:start; transition:all 0.3s; }
+  .pres-item:hover { border-color:rgba(74,140,92,0.35); background:rgba(26,77,46,0.2); transform:translateX(4px); }
+  .pres-year { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--green3); min-width:50px; }
+  .pres-info h4 { color:#fff; font-size:0.95rem; margin-bottom:0.3rem; }
+  .pres-info p { color:var(--muted); font-size:0.82rem; line-height:1.6; }
 
   /* CONTACT */
-  #contact {
-    padding: 7rem 2rem;
-    text-align: center;
-  }
-  .contact-inner {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  .contact-inner p {
-    color: var(--muted);
-    line-height: 1.8;
-    margin-bottom: 2.5rem;
-    font-size: 0.97rem;
-  }
-  .contact-links {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .contact-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.9rem 1.8rem;
-    border-radius: 40px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    transition: all 0.3s;
-    border: 1px solid rgba(74,140,92,0.3);
-    color: var(--text);
-    background: rgba(10,26,16,0.6);
-  }
-  .contact-link:hover {
-    background: rgba(74,140,92,0.15);
-    border-color: var(--accent);
-    color: var(--accent);
-    box-shadow: 0 0 20px rgba(74,140,92,0.2);
-  }
+  #contact { padding:7rem 2rem; text-align:center; }
+  .contact-inner { max-width:600px; margin:0 auto; }
+  .contact-inner p { color:var(--muted); line-height:1.8; margin-bottom:2.5rem; font-size:0.97rem; }
+  .contact-links { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .contact-link { display:flex; align-items:center; gap:0.5rem; padding:0.9rem 1.8rem; border-radius:40px; text-decoration:none; font-size:0.85rem; letter-spacing:0.08em; transition:all 0.3s; border:1px solid rgba(74,140,92,0.3); color:var(--text); background:rgba(10,26,16,0.6); }
+  .contact-link:hover { background:rgba(74,140,92,0.15); border-color:var(--accent); color:var(--accent); box-shadow:0 0 20px rgba(74,140,92,0.2); }
 
-  /* FOOTER */
-  footer {
-    text-align: center;
-    padding: 2rem;
-    border-top: 1px solid rgba(74,140,92,0.1);
-    color: var(--muted);
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    position: relative;
-    z-index: 1;
-  }
+  footer { text-align:center; padding:2rem; border-top:1px solid rgba(74,140,92,0.1); color:var(--muted); font-size:0.78rem; letter-spacing:0.08em; position:relative; z-index:1; }
 
-  /* FADE IN */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .fade-in { opacity:0; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
+  .fade-in.visible { opacity:1; transform:translateY(0); }
 
-  @media (max-width: 700px) {
-    .about-inner { grid-template-columns: 1fr; gap: 2rem; }
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { gap: 1rem; }
-    .nav-links a { font-size: 0.75rem; }
+  @media(max-width:700px){
+    .about-inner{grid-template-columns:1fr;gap:2rem;}
+    nav{padding:1rem 1.5rem;}
+    .nav-links{gap:1rem;}
+    .nav-links a{font-size:0.75rem;}
+    .flip-card{height:360px;}
   }
 </style>
 </head>
@@ -539,14 +158,11 @@
   </ul>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
   <div class="hero-eyebrow">GIS Developer & Conservation Technologist</div>
   <h1>Abigail<br><span>Pendry</span></h1>
   <div class="hero-title">Manager, Spatial Analytics · National Audubon Society</div>
-  <p class="hero-desc">
-    Mapping the intersection of technology and the natural world — building geospatial systems that protect wildlife, restore ecosystems, and amplify the mission of conservation.
-  </p>
+  <p class="hero-desc">Mapping the intersection of technology and the natural world — building geospatial systems that protect wildlife, restore ecosystems, and amplify the mission of conservation.</p>
   <div class="hero-btns">
     <a href="#projects" class="btn btn-primary">View My Work</a>
     <a href="#contact" class="btn btn-outline">Get In Touch</a>
@@ -554,7 +170,6 @@
   <div class="scroll-hint">Explore</div>
 </section>
 
-<!-- ABOUT -->
 <section id="about">
   <div class="about-inner">
     <div class="about-text fade-in">
@@ -564,7 +179,7 @@
     </div>
     <div class="about-stats fade-in">
       <div class="stat-card">
-        <div class="stat-num">4+</div>
+        <div class="stat-num">6+</div>
         <div class="stat-label">Years in Conservation GIS</div>
       </div>
       <div class="stat-card">
@@ -577,85 +192,153 @@
       </div>
       <div class="stat-card">
         <div class="stat-num">3.9</div>
-        <div class="stat-label">GPA · Summa Cum Laude, Elon University</div>
+        <div class="stat-label">GPA · Summa Cum Laude</div>
+        <div class="stat-label" style="margin-top:0.4rem;">Environmental & Ecological Science · Facilitation & Education</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PROJECTS -->
 <section id="projects">
   <div class="section-header fade-in">
     <h2>Featured Projects</h2>
     <div class="leaf-divider">🌿</div>
-    <p>Conservation-driven geospatial systems, built to scale</p>
+    <p>Click a card to learn more · Conservation-driven geospatial systems built to scale</p>
   </div>
   <div class="projects-grid">
 
-    <div class="project-card fade-in">
-      <div class="project-icon">🦅</div>
-      <div class="project-org">National Audubon Society</div>
-      <h3>Bald Eagle Telemetry Pipeline</h3>
-      <p>Engineered a fully automated daily pipeline integrating wildlife telemetry from MoveBank API into ArcGIS Online — converting millions of hourly GPS points into track lines for near real-time visualization of Bald Eagle movements.</p>
-      <div class="project-tags">
-        <span class="tag">Python</span><span class="tag">MoveBank API</span><span class="tag">ArcGIS Online</span><span class="tag">Telemetry</span>
+    <div class="flip-card fade-in">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="project-icon">🦅</div>
+          <div class="project-org">National Audubon Society</div>
+          <h3>Bald Eagle Telemetry Pipeline</h3>
+          <p>Automated daily pipeline integrating wildlife telemetry from MoveBank API into ArcGIS Online for near real-time visualization of Bald Eagle movements.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">MoveBank API</span><span class="tag">ArcGIS Online</span><span class="tag">Telemetry</span></div>
+          <div class="flip-hint">Click to explore →</div>
+        </div>
+        <div class="flip-back">
+          <div class="back-screenshot">🦅</div>
+          <h3>Bald Eagle Telemetry Pipeline</h3>
+          <p>Engineered a fully automated daily pipeline converting millions of hourly GPS points into track lines, enabling scientists and stakeholders to visualize Bald Eagle movements in near real-time across the country.</p>
+        </div>
       </div>
     </div>
 
-    <div class="project-card fade-in">
-      <div class="project-icon">🐾</div>
-      <div class="project-org">Jane Goodall Institute</div>
-      <h3>Chimpanzee Alert & Decision Support System</h3>
-      <p>Scripted and deployed a real-time alert notification system across the chimpanzee range in Africa. Traveled to Tanzania to deploy on the ground. Integrated ArcGIS API for Python, GeoPandas, and Twilio API to notify decision-makers of imminent threats.</p>
-      <div class="project-tags">
-        <span class="tag">ArcGIS Python API</span><span class="tag">GeoPandas</span><span class="tag">Twilio</span><span class="tag">Tanzania</span>
+    <div class="flip-card fade-in">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="project-icon">🐾</div>
+          <div class="project-org">Jane Goodall Institute</div>
+          <h3>Chimpanzee Alert & Decision Support System</h3>
+          <p>Real-time alert system across the chimpanzee range in Africa. Traveled to Tanzania to deploy on the ground using ArcGIS, GeoPandas, and Twilio.</p>
+          <div class="project-tags"><span class="tag">ArcGIS Python API</span><span class="tag">GeoPandas</span><span class="tag">Twilio</span><span class="tag">Tanzania</span></div>
+          <div class="flip-hint">Click to explore →</div>
+        </div>
+        <div class="flip-back">
+          <div class="back-screenshot">🐾</div>
+          <h3>Chimpanzee Alert & Decision Support System</h3>
+          <p>Built and deployed a real-time alert notification system notifying on-the-ground decision-makers of imminent threats to chimpanzees across Western Tanzania. Traveled to Tanzania at the request of JGI's VP of Conservation to deploy and consult on GIS initiatives.</p>
+        </div>
       </div>
     </div>
 
-    <div class="project-card fade-in">
-      <div class="project-icon">🦜</div>
-      <div class="project-org">National Audubon Society</div>
-      <h3>Migratory Bird Explorer</h3>
-      <p>Processed and published thousands of datasets supporting this groundbreaking application visualizing the migratory paths of 458 species across the Western Hemisphere — via SQL stored procedures, Python scripts, and automated QA pipelines.</p>
-      <div class="project-tags">
-        <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">ArcGIS</span><span class="tag">Data Automation</span>
+    <div class="flip-card fade-in">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="project-icon">🦜</div>
+          <div class="project-org">National Audubon Society</div>
+          <h3>Migratory Bird Explorer</h3>
+          <p>Processed and published thousands of datasets supporting a groundbreaking application visualizing migratory paths of 458 species across the Western Hemisphere.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">ArcGIS</span><span class="tag">Data Automation</span></div>
+          <div class="flip-hint">Click to explore →</div>
+        </div>
+        <div class="flip-back">
+          <div class="back-screenshot">🦜</div>
+          <h3>Migratory Bird Explorer</h3>
+          <p>Maintained and automated the data pipelines powering Audubon's flagship public application — visualizing conservation challenges, migratory paths, and community connections for 458 bird species across the Western Hemisphere.</p>
+          <a href="https://explorer.audubon.org/home?layersPanel=collapse&legend=collapse" target="_blank" class="back-link">🔗 View Live Tool</a>
+        </div>
       </div>
     </div>
 
-    <div class="project-card fade-in">
-      <div class="project-icon">💧</div>
-      <div class="project-org">Natural Resources Defense Council</div>
-      <h3>National Wetlands Protection Analysis</h3>
-      <p>Built a national-scale automated Python model in response to Sackett v. EPA — identifying wetlands that lost Clean Water Act protection and highlighting communities most impacted by the Supreme Court ruling.</p>
-      <div class="project-tags">
-        <span class="tag">Python</span><span class="tag">Raster Analysis</span><span class="tag">National Scale</span><span class="tag">Policy</span>
+    <div class="flip-card fade-in">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="project-icon">💧</div>
+          <div class="project-org">Natural Resources Defense Council</div>
+          <h3>National Wetlands Protection Analysis</h3>
+          <p>National-scale automated Python model identifying wetlands that lost Clean Water Act protection following Sackett v. EPA, highlighting most impacted communities.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">Raster Analysis</span><span class="tag">National Scale</span><span class="tag">Policy</span></div>
+          <div class="flip-hint">Click to explore →</div>
+        </div>
+        <div class="flip-back">
+          <div class="back-screenshot">💧</div>
+          <h3>National Wetlands Protection Analysis</h3>
+          <p>In response to the Sackett v. EPA Supreme Court ruling redefining Clean Water Act protections, built a rigorous national-scale model to define biological wetlands, measure the loss of protection, and identify the communities most impacted by the decision.</p>
+        </div>
       </div>
     </div>
 
-    <div class="project-card fade-in">
-      <div class="project-icon">🌲</div>
-      <div class="project-org">World Resources Institute</div>
-      <h3>Global Forest Watch Pro</h3>
-      <p>Performed end-to-end QA/QC and deployed enhancements to AWS Lambdas and Step Functions via Terraform for a supply-chain deforestation monitoring tool used by companies worldwide.</p>
-      <div class="project-tags">
-        <span class="tag">AWS Lambda</span><span class="tag">Terraform</span><span class="tag">Step Functions</span><span class="tag">QA/QC</span>
+    <div class="flip-card fade-in">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="project-icon">🌲</div>
+          <div class="project-org">World Resources Institute</div>
+          <h3>Global Forest Watch Pro</h3>
+          <p>QA/QC and AWS Lambda + Step Function enhancements via Terraform for a supply-chain deforestation monitoring tool used by companies worldwide.</p>
+          <div class="project-tags"><span class="tag">AWS Lambda</span><span class="tag">Terraform</span><span class="tag">Step Functions</span><span class="tag">QA/QC</span></div>
+          <div class="flip-hint">Click to explore →</div>
+        </div>
+        <div class="flip-back">
+          <div class="back-screenshot">🌲</div>
+          <h3>Global Forest Watch Pro</h3>
+          <p>A decision support tool empowering companies to monitor supply chains for deforestation and fires. Responsible for thorough QA/QC of each release and deploying enhancements to AWS Lambdas and Step Functions as new features become available.</p>
+          <a href="https://pro.globalforestwatch.org/" target="_blank" class="back-link">🔗 View Live Tool</a>
+        </div>
       </div>
     </div>
 
-    <div class="project-card fade-in">
-      <div class="project-icon">🌊</div>
-      <div class="project-org">The Nature Conservancy</div>
-      <h3>Coastal Habitat Restoration Framework</h3>
-      <p>Collated 100+ raster and vector datasets across saltmarsh, seagrass, kelp, mangroves, and oysters — normalizing data to identify coastal habitats at highest risk and communities most underserved by restoration investment.</p>
-      <div class="project-tags">
-        <span class="tag">Raster/Vector</span><span class="tag">GeoPandas</span><span class="tag">Environmental Equity</span>
+    <div class="flip-card fade-in">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="project-icon">🌳</div>
+          <div class="project-org">ICLEI USA / World Resources Institute</div>
+          <h3>LEARN Tool — Carbon & Ecosystem Analysis</h3>
+          <p>Designed and integrated a raster analysis geoprocessing tool for carbon sequestration and removal calculations powering the LEARN tool.</p>
+          <div class="project-tags"><span class="tag">Raster Analysis</span><span class="tag">Carbon Sequestration</span><span class="tag">Python</span><span class="tag">REST API</span></div>
+          <div class="flip-hint">Click to explore →</div>
+        </div>
+        <div class="flip-back">
+          <div class="back-screenshot">🌳</div>
+          <h3>LEARN Tool</h3>
+          <p>Built a raster analysis geoprocessing tool for carbon sequestration calculations integrated into a JavaScript application. The front-end sends REST endpoint queries directly to Python raster analysis tools in the cloud for dynamic, on-demand results.</p>
+          <a href="https://icleiusa.org/LEARN/" target="_blank" class="back-link">🔗 View Live Tool</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card fade-in">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="project-icon">🌊</div>
+          <div class="project-org">The Nature Conservancy</div>
+          <h3>Coastal Habitat Restoration Framework</h3>
+          <p>Collated 100+ raster and vector datasets across saltmarsh, seagrass, kelp, mangroves, and oysters to identify coastal habitats at highest risk.</p>
+          <div class="project-tags"><span class="tag">Raster/Vector</span><span class="tag">GeoPandas</span><span class="tag">Environmental Equity</span></div>
+          <div class="flip-hint">Click to explore →</div>
+        </div>
+        <div class="flip-back">
+          <div class="back-screenshot">🌊</div>
+          <h3>Coastal Habitat Restoration Framework</h3>
+          <p>Coordinated data collection and analysis across 100+ datasets for five critical marine habitats in the contiguous U.S. — identifying areas with the highest restoration potential and communities most underserved by past restoration investment.</p>
+        </div>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- SKILLS -->
 <section id="skills">
   <div class="section-header fade-in">
     <h2>Skills Ecosystem</h2>
@@ -666,74 +349,42 @@
     <div class="skill-branch fade-in">
       <h4>🐍 Python & Data Engineering</h4>
       <div class="skill-list">
-        <span class="skill-item">Python</span>
-        <span class="skill-item">ArcPy</span>
-        <span class="skill-item">ArcGIS API for Python</span>
-        <span class="skill-item">Pandas</span>
-        <span class="skill-item">GeoPandas</span>
-        <span class="skill-item">Requests</span>
-        <span class="skill-item">OpenAI API</span>
+        <span class="skill-item">Python</span><span class="skill-item">ArcPy</span><span class="skill-item">ArcGIS API for Python</span><span class="skill-item">Pandas</span><span class="skill-item">GeoPandas</span><span class="skill-item">Requests</span><span class="skill-item">OpenAI API</span>
       </div>
     </div>
     <div class="skill-branch fade-in">
       <h4>☁️ Cloud & Infrastructure</h4>
       <div class="skill-list">
-        <span class="skill-item">AWS Lambda</span>
-        <span class="skill-item">Step Functions</span>
-        <span class="skill-item">S3</span>
-        <span class="skill-item">Terraform</span>
-        <span class="skill-item">REST APIs</span>
-        <span class="skill-item">PostMan</span>
+        <span class="skill-item">AWS Lambda</span><span class="skill-item">Step Functions</span><span class="skill-item">S3</span><span class="skill-item">Terraform</span><span class="skill-item">REST APIs</span><span class="skill-item">PostMan</span>
       </div>
     </div>
     <div class="skill-branch fade-in">
       <h4>🗺️ Esri / GIS Platform</h4>
       <div class="skill-list">
-        <span class="skill-item">ArcGIS Pro</span>
-        <span class="skill-item">ArcGIS Online</span>
-        <span class="skill-item">ArcGIS Enterprise</span>
-        <span class="skill-item">Experience Builder</span>
-        <span class="skill-item">Survey123</span>
-        <span class="skill-item">FieldMaps</span>
-        <span class="skill-item">ArcGIS Dashboards</span>
-        <span class="skill-item">QGIS</span>
+        <span class="skill-item">ArcGIS Pro</span><span class="skill-item">ArcGIS Online</span><span class="skill-item">ArcGIS Enterprise</span><span class="skill-item">Experience Builder</span><span class="skill-item">Survey123</span><span class="skill-item">FieldMaps</span><span class="skill-item">ArcGIS Dashboards</span><span class="skill-item">QGIS</span>
       </div>
     </div>
     <div class="skill-branch fade-in">
       <h4>🗄️ Data & Databases</h4>
       <div class="skill-list">
-        <span class="skill-item">PostgreSQL</span>
-        <span class="skill-item">Microsoft SQL</span>
-        <span class="skill-item">Git / GitHub</span>
-        <span class="skill-item">ETL Pipelines</span>
-        <span class="skill-item">Stored Procedures</span>
+        <span class="skill-item">PostgreSQL</span><span class="skill-item">Microsoft SQL</span><span class="skill-item">Git / GitHub</span><span class="skill-item">ETL Pipelines</span><span class="skill-item">Stored Procedures</span>
       </div>
     </div>
     <div class="skill-branch fade-in">
       <h4>📋 Project Management</h4>
       <div class="skill-list">
-        <span class="skill-item">Agile / Scrum</span>
-        <span class="skill-item">Jira</span>
-        <span class="skill-item">Confluence</span>
-        <span class="skill-item">Sprint Planning</span>
-        <span class="skill-item">Technical Documentation</span>
+        <span class="skill-item">Agile / Scrum</span><span class="skill-item">Jira</span><span class="skill-item">Confluence</span><span class="skill-item">Sprint Planning</span><span class="skill-item">Technical Documentation</span>
       </div>
     </div>
     <div class="skill-branch fade-in">
       <h4>🎓 Domain Expertise</h4>
       <div class="skill-list">
-        <span class="skill-item">Wildlife Telemetry</span>
-        <span class="skill-item">Wetland Science</span>
-        <span class="skill-item">Carbon Sequestration</span>
-        <span class="skill-item">Conservation Biology</span>
-        <span class="skill-item">Environmental Equity</span>
-        <span class="skill-item">Remote Sensing</span>
+        <span class="skill-item">Wildlife Telemetry</span><span class="skill-item">Wetland Science</span><span class="skill-item">Carbon Sequestration</span><span class="skill-item">Conservation Biology</span><span class="skill-item">Environmental Equity</span><span class="skill-item">Remote Sensing</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRESENTATIONS -->
 <section id="presentations">
   <div class="section-header fade-in">
     <h2>Talks & Presentations</h2>
@@ -743,50 +394,48 @@
   <div class="pres-list">
     <div class="pres-item fade-in">
       <div class="pres-year">2025</div>
-      <div class="pres-info">
-        <h4>Johns Hopkins HOP25 Climate Symposium</h4>
-        <p>Presented on how the National Audubon Society is using the latest GIS technologies to augment conservation efforts.</p>
-      </div>
+      <div class="pres-info"><h4>Johns Hopkins HOP25 Climate Symposium</h4><p>Presented on how the National Audubon Society is using the latest GIS technologies to augment conservation efforts.</p></div>
     </div>
     <div class="pres-item fade-in">
       <div class="pres-year">2024</div>
-      <div class="pres-info">
-        <h4>Esri Federal User Conference (3 sessions)</h4>
-        <p>Presented on automated ETL workflows for national-scale raster/vector data; panelist on GIS in nonprofits; presented on Audubon's Migratory Bird Explorer and JGI's Alert System at SCGIS International Conference.</p>
-      </div>
+      <div class="pres-info"><h4>Esri Federal User Conference (3 sessions)</h4><p>Presented on automated ETL workflows for national-scale raster/vector data; panelist on GIS in nonprofits; presented on Audubon's Migratory Bird Explorer and JGI's Alert System at SCGIS International Conference.</p></div>
     </div>
     <div class="pres-item fade-in">
       <div class="pres-year">2023</div>
-      <div class="pres-info">
-        <h4>Esri Federal User Conference & Esri Young Professionals Network</h4>
-        <p>Panelist advocating for modern GIS adoption for young professionals. Live demo of WRI's LEARN tool REST/Python architecture at Esri YPN.</p>
-      </div>
+      <div class="pres-info"><h4>Esri Federal User Conference & Esri Young Professionals Network</h4><p>Panelist advocating for modern GIS adoption for young professionals. Live demo of WRI's LEARN tool REST/Python architecture at Esri YPN.</p></div>
     </div>
     <div class="pres-item fade-in">
       <div class="pres-year">2022</div>
-      <div class="pres-info">
-        <h4>GeoDC</h4>
-        <p>Demonstrated how coordinated ArcGIS API for Python and hosted Jupyter Notebooks can augment incoming spatial data in near real-time.</p>
-      </div>
+      <div class="pres-info"><h4>GeoDC</h4><p>Demonstrated how coordinated ArcGIS API for Python and hosted Jupyter Notebooks can augment incoming spatial data in near real-time.</p></div>
     </div>
     <div class="pres-item fade-in">
       <div class="pres-year">2021</div>
-      <div class="pres-info">
-        <h4>Yale School of the Environment · New Horizons Conference</h4>
-        <p>Highlighted the spatial correlation between birding activity and socioeconomic factors in Atlanta, Georgia, via an ArcGIS Dashboard.</p>
-      </div>
+      <div class="pres-info"><h4>Yale School of the Environment · New Horizons Conference</h4><p>Highlighted the spatial correlation between birding activity and socioeconomic factors in Atlanta, Georgia, via an ArcGIS Dashboard.</p></div>
     </div>
     <div class="pres-item fade-in">
       <div class="pres-year">2021</div>
+      <div class="pres-info"><h4>Sierra Club</h4><p>Delivered expertise on how GIS can expand accessible recreational sites while mitigating harm to vulnerable ecosystems.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="involvement" style="padding:0 2rem 7rem;">
+  <div class="section-header fade-in">
+    <h2>Community & Leadership</h2>
+    <div class="leaf-divider">🌍</div>
+    <p>Advancing the GIS conservation community</p>
+  </div>
+  <div class="pres-list">
+    <div class="pres-item fade-in">
+      <div class="pres-year">🌿</div>
       <div class="pres-info">
-        <h4>Sierra Club</h4>
-        <p>Delivered expertise on how GIS can expand accessible recreational sites while mitigating harm to vulnerable ecosystems.</p>
+        <h4>Chapter Coordinator — Society for Conservation GIS, DC Chapter</h4>
+        <p>Organizing and leading the Washington D.C. chapter of SCGIS — connecting conservation professionals, GIS practitioners, and researchers across the region to advance the use of spatial technology in conservation.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
   <div class="contact-inner fade-in">
     <div class="section-header">
@@ -807,42 +456,19 @@
 </footer>
 
 <script>
-// PARTICLE / BOTANICAL CANVAS
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let W, H, particles = [], leaves = [];
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
 resize();
 window.addEventListener('resize', resize);
 
-// Particles
 for (let i = 0; i < 80; i++) {
-  particles.push({
-    x: Math.random() * 2000,
-    y: Math.random() * 2000,
-    r: Math.random() * 1.5 + 0.3,
-    speed: Math.random() * 0.3 + 0.05,
-    opacity: Math.random() * 0.5 + 0.1,
-    drift: (Math.random() - 0.5) * 0.2
-  });
+  particles.push({ x:Math.random()*2000, y:Math.random()*2000, r:Math.random()*1.5+0.3, speed:Math.random()*0.3+0.05, opacity:Math.random()*0.5+0.1, drift:(Math.random()-0.5)*0.2 });
 }
-
-// Leaf shapes
 for (let i = 0; i < 12; i++) {
-  leaves.push({
-    x: Math.random() * 2000,
-    y: Math.random() * 2000,
-    size: Math.random() * 18 + 8,
-    angle: Math.random() * Math.PI * 2,
-    rotSpeed: (Math.random() - 0.5) * 0.005,
-    speed: Math.random() * 0.15 + 0.05,
-    opacity: Math.random() * 0.12 + 0.04,
-    drift: (Math.random() - 0.5) * 0.3
-  });
+  leaves.push({ x:Math.random()*2000, y:Math.random()*2000, size:Math.random()*35+20, angle:Math.random()*Math.PI*2, rotSpeed:(Math.random()-0.5)*0.005, speed:Math.random()*0.15+0.05, opacity:Math.random()*0.12+0.04, drift:(Math.random()-0.5)*0.3 });
 }
 
 function drawLeaf(cx, cy, size, angle, opacity) {
@@ -850,79 +476,65 @@ function drawLeaf(cx, cy, size, angle, opacity) {
   ctx.translate(cx, cy);
   ctx.rotate(angle);
   ctx.globalAlpha = opacity;
-  ctx.strokeStyle = '#4a8c5c';
-  ctx.lineWidth = 1;
+  const l = size*1.8, w = size*0.65;
   ctx.beginPath();
-  ctx.moveTo(0, -size);
-  ctx.bezierCurveTo(size * 0.7, -size * 0.5, size * 0.7, size * 0.5, 0, size);
-  ctx.bezierCurveTo(-size * 0.7, size * 0.5, -size * 0.7, -size * 0.5, 0, -size);
-  ctx.stroke();
-  // midrib
+  ctx.moveTo(0,-l*0.5);
+  ctx.bezierCurveTo(w*0.9,-l*0.25,w,l*0.1,0,l*0.5);
+  ctx.bezierCurveTo(-w,l*0.1,-w*0.9,-l*0.25,0,-l*0.5);
+  ctx.closePath();
+  ctx.fillStyle='rgba(45,110,68,0.18)'; ctx.fill();
+  ctx.strokeStyle='#4a8c5c'; ctx.lineWidth=0.8; ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(0, -size);
-  ctx.lineTo(0, size);
-  ctx.globalAlpha = opacity * 0.5;
-  ctx.stroke();
+  ctx.moveTo(0,-l*0.5); ctx.quadraticCurveTo(size*0.1,0,0,l*0.5);
+  ctx.globalAlpha=opacity*0.6; ctx.lineWidth=0.6; ctx.stroke();
+  ctx.globalAlpha=opacity*0.35; ctx.lineWidth=0.5;
+  [[-l*0.25,0.55],[-l*0.02,0.65],[l*0.18,0.5]].forEach(([yOff,spread])=>{
+    ctx.beginPath(); ctx.moveTo(0,yOff); ctx.quadraticCurveTo(w*spread*0.6,yOff-l*0.04,w*spread,yOff+l*0.08); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,yOff); ctx.quadraticCurveTo(-w*spread*0.6,yOff-l*0.04,-w*spread,yOff+l*0.08); ctx.stroke();
+  });
   ctx.restore();
 }
 
-// Grid lines (map overlay)
 function drawGrid() {
-  ctx.save();
-  ctx.globalAlpha = 0.03;
-  ctx.strokeStyle = '#4a8c5c';
-  ctx.lineWidth = 0.5;
-  const spacing = 60;
-  for (let x = 0; x < W; x += spacing) {
-    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-  }
-  for (let y = 0; y < H; y += spacing) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-  }
+  ctx.save(); ctx.globalAlpha=0.03; ctx.strokeStyle='#4a8c5c'; ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
   ctx.restore();
 }
 
 function animate() {
-  ctx.clearRect(0, 0, W, H);
-
+  ctx.clearRect(0,0,W,H);
   drawGrid();
-
-  // particles
-  particles.forEach(p => {
-    p.y -= p.speed;
-    p.x += p.drift;
-    if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
-    if (p.x < 0) p.x = W;
-    if (p.x > W) p.x = 0;
-
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(126,201,154,${p.opacity})`;
-    ctx.fill();
+  particles.forEach(p=>{
+    p.y-=p.speed; p.x+=p.drift;
+    if(p.y<-10){p.y=H+10;p.x=Math.random()*W;}
+    if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(126,201,154,${p.opacity})`; ctx.fill();
   });
-
-  // leaves
-  leaves.forEach(l => {
-    l.y -= l.speed;
-    l.x += l.drift;
-    l.angle += l.rotSpeed;
-    if (l.y < -30) { l.y = H + 30; l.x = Math.random() * W; }
-    if (l.x < 0) l.x = W;
-    if (l.x > W) l.x = 0;
-    drawLeaf(l.x, l.y, l.size, l.angle, l.opacity);
+  leaves.forEach(l=>{
+    l.y-=l.speed; l.x+=l.drift; l.angle+=l.rotSpeed;
+    if(l.y<-30){l.y=H+30;l.x=Math.random()*W;}
+    if(l.x<0)l.x=W; if(l.x>W)l.x=0;
+    drawLeaf(l.x,l.y,l.size,l.angle,l.opacity);
   });
-
   requestAnimationFrame(animate);
 }
 animate();
 
-// FADE IN OBSERVER
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); }
+// FLIP CARDS — click to flip, click again to flip back
+document.querySelectorAll('.flip-card').forEach(card => {
+  card.addEventListener('click', e => {
+    if (e.target.closest('a')) return; // let link clicks pass through
+    card.classList.toggle('flipped');
   });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+});
+
+// FADE IN
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
 </script>
 </body>
 </html>
